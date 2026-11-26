@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Zera Game Lab</title>
+  <style>
+    :root {
+      --bg-top: #0c1220;
+      --bg-bottom: #05080f;
+      --card-bg: rgba(17, 25, 40, 0.72);
+      --card-border: rgba(148, 163, 184, 0.16);
+      --card-dashed: rgba(148, 163, 184, 0.2);
+      --btn-bg: rgba(11, 17, 30, 0.85);
+      --btn-hover: rgba(30, 41, 59, 0.9);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #f5c518;
+      --accent-dark: #0f172a;
+      --live-bg: rgba(34, 197, 94, 0.12);
+      --live-border: rgba(34, 197, 94, 0.35);
+      --live-text: #4ade80;
+      --link-blue: #38bdf8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100dvh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(245, 197, 24, 0.08), transparent 42%),
+        radial-gradient(circle at 50% 25%, #111a2e 0%, var(--bg-top) 45%, var(--bg-bottom) 100%);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    .topbar {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .lang-btn[aria-pressed="true"] {
+      background: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 0 18px rgba(245, 197, 24, 0.35));
+    }
+
+    .hero h1 {
+      font-size: clamp(1.85rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      margin-top: 0.45rem;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card--dashed {
+      border-style: dashed;
+      border-color: var(--card-dashed);
+      background: rgba(13, 20, 34, 0.45);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 260px;
+    }
+
+    .badge {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--live-text);
+      background: var(--live-bg);
+      border: 1px solid var(--live-border);
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 1.15rem;
+    }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .game-tile {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #f8fafc, #cbd5e1);
+      color: #dc2626;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    .game-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .game-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .game-desc {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      margin-bottom: 1.35rem;
+      flex: 1;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text-main);
+      background: var(--btn-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .link-btn:hover {
+      background: var(--btn-hover);
+      border-color: rgba(245, 197, 24, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .coming-icon {
+      font-size: 1.6rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .coming-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .coming-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 28ch;
+    }
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--link-blue);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="tr" aria-pressed="false">TR</button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-icon" aria-hidden="true">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none">
+          <path d="M6.5 7.5h11a4 4 0 0 1 3.92 4.78l-.7 3.5A3 3 0 0 1 17.78 18c-1.08 0-2.08-.58-2.62-1.52L14.5 15.3h-5l-.66 1.18A3 3 0 0 1 6.22 18a3 3 0 0 1-2.94-2.22l-.7-3.5A4 4 0 0 1 6.5 7.5Z" fill="#6366f1"/>
+          <path d="M8 10.5v3M6.5 12h3" stroke="#f8fafc" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="15.5" cy="11.2" r="0.9" fill="#f5c518"/>
+          <circle cx="17.2" cy="12.8" r="0.9" fill="#4ade80"/>
+        </svg>
+      </div>
+      <h1>ZERA <span>GAME LAB</span></h1>
+      <p data-i18n="subtitle">Independent Mobile &amp; Multiplayer Game Studio</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="badge" data-i18n="live">LIVE</span>
+        <div class="game-header">
+          <div class="game-tile" aria-hidden="true">K</div>
+          <div>
+            <h2 class="game-title">Kombino</h2>
+            <p class="game-subtitle" data-i18n="gameSubtitle">Tactical Tile Board Game</p>
+          </div>
+        </div>
+        <p class="game-desc" data-i18n="gameDesc">
+          Next-generation tactical tile board game featuring real-time multiplayer leagues and solo tower challenge.
+        </p>
+        <div class="links">
+          <a class="link-btn" href="https://zeragames.github.io/zeragamelab-legal/">
+            <span data-i18n="legalPortalBtn">⚖️ Privacy Policy, Terms &amp; Legal Portal</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+
+      <aside class="card card--dashed">
+        <div class="coming-icon" aria-hidden="true">✨</div>
+        <h2 class="coming-title" data-i18n="comingTitle">New Titles Coming Soon</h2>
+        <p class="coming-desc" data-i18n="comingDesc">
+          Upcoming games and studio updates will be published here.
+        </p>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="copyright">© 2026 Zera Game Lab. All rights reserved.</p>
+    <p>
+      <span data-i18n="contactLabel">Contact &amp; Support:</span>
+      <a href="mailto:zera.game.lab@gmail.com">zera.game.lab@gmail.com</a>
+    </p>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        subtitle: "Independent Mobile & Multiplayer Game Studio",
+        live: "LIVE",
+        gameSubtitle: "Tactical Tile Board Game",
+        gameDesc: "Next-generation tactical tile board game featuring real-time multiplayer leagues and solo tower challenge.",
+        legalPortalBtn: "⚖️ Privacy Policy, Terms & Legal Portal",
+        comingTitle: "New Titles Coming Soon",
+        comingDesc: "Upcoming games and studio updates will be published here.",
+        copyright: "© 2026 Zera Game Lab. All rights reserved.",
+        contactLabel: "Contact & Support:"
+      },
+      tr: {
+        subtitle: "Bağımsız Mobil & Çok Oyunculu Oyun Stüdyosu",
+        live: "YAYINDA",
+        gameSubtitle: "Taktiksel Taş Masa Oyunu",
+        gameDesc: "Gerçek zamanlı çok oyunculu ligler ve tek kişilik kule mücadelesi sunan yeni nesil taktiksel taş masa oyunu.",
+        legalPortalBtn: "⚖️ Gizlilik Politikası, Koşullar ve Yasal Portal",
+        comingTitle: "Yeni Oyunlar Yakında",
+        comingDesc: "Yaklaşan oyunlarımız ve stüdyo duyuruları burada yayınlanacaktır.",
+        copyright: "© 2026 Zera Game Lab. Tüm hakları saklıdır.",
+        contactLabel: "İletişim & Destek:"
+      }
+    };
+
+    const buttons = document.querySelectorAll(".lang-btn");
+    const i18nNodes = document.querySelectorAll("[data-i18n]");
+
+    function setLanguage(lang) {
+      const dict = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
+      i18nNodes.forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (dict[key]) node.textContent = dict[key];
+      });
+      buttons.forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>
